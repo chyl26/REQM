@@ -31,7 +31,7 @@
     <!-- 添加句子SQL语句 -->
     <insert id="InsertUser" parameterClass="User" >
       <![CDATA[  
-      insert into User  
+      insert into Users  
       (UserID,UserName,DisplayName,PasswordHash,Email,MobilePhone,CreateAt)  
       values  
       (#UserID#,#UserName#,#DisplayName#,#PasswordHash#,#Email#,#MobilePhone#,#CreateAt#)  
@@ -41,7 +41,7 @@
     <!-- parameterClass表示传入的参数为int -->
     <delete id="DeleteUser" parameterClass="string">
       <![CDATA[
-          delete from User  
+          delete from Users  
           where  
           UserID = #value#  
           ]]>
@@ -50,7 +50,7 @@
     <!-- #UserName# 表示传入实体类参数的属性，表示实体的的属性 -->
     <update id="UpdateUser" parameterClass="User">
       <![CDATA[  
-          UPDATE User SET  
+          UPDATE Users SET  
           UserName=#UserName#,
           DisplayName=#DisplayName#,
           PasswordHash=#PasswordHash#,
@@ -72,7 +72,7 @@
           ,Email
           ,MobilePhone
           ,CreateAt
-          FROM User
+          FROM Users
           ]]>
     </select>
 

@@ -1,4 +1,6 @@
-﻿using REQM.Domain;
+﻿using IBatisNet.DataMapper;
+using IBatisNet.DataMapper.Configuration;
+using REQM.Domain;
 using REQM.Repository;
 using System;
 using System.Collections.Generic;
@@ -9,36 +11,69 @@ namespace REQM.Service
 {
     public class UserService
     {
-        IRepository<User> repository = new MbRepository<User>();
-        /// <summary>
-        /// 新增用户
-        /// </summary>
-        /// <param name="user"></param>
-        public void Create(User user)
+        private SqlMapper sqlMapper = null;
+
+        public UserService()
         {
-            repository.Insert("InsertUser", user);
+            ISqlMapper mapper = Mapper.Instance();
+            DomSqlMapBuilder builder = new DomSqlMapBuilder();
+            sqlMapper = builder.Configure() as SqlMapper;
         }
-        public void GetUserById(string userId)
+
+
+        public bool Create(User user)
         {
-            User user = repository.GetByCondition("SelectUserByCondition", new User { UserId = userId });
+            string connectionString = sqlMapper.DataSource.ConnectionString;
+            Console.WriteLine(connectionString);
+            try
+            {
+                sqlMapper.Insert("InsertUser", user);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message.ToString());
+            }
+            return false;
         }
-        public IList<User> GetUsers(int pageCount)
+
+        public User GetUserById(string userID)
         {
-            IList<User> userList = repository.GetList("SelectUserByCondition", new User { }, pageCount);
+            User user = sqlMapper.QueryForObject<User>("SelectUserById", userID);
+            return user;
+        }
+
+        public User CheckUser(User user)
+        {
+            User user1 = sqlMapper.QueryForObject<User>("CheckUser", user);
+            return user1;
+        }
+
+
+        public IList<User> GetUsers()
+        {
+            IList<User> users = sqlMapper.QueryForList<User>("SelectAllUser", null);
+            return users;
+        }
+
+        public IList<User> GetUsers(int index, int size)
+        {
+            IList<User> userList = sqlMapper.QueryForList<User>("SelectAllUser", null, index, size);
             return userList;
         }
-        public int GetCount()
+
+
+        public bool Update(User user)
         {
-            int count = repository.GetObject<int>("SelectUserCount", null);
-            return count;
+            int result = sqlMapper.Update("UpdateUser", user);
+            return result > 0;
         }
-        public void Update(User user)
+
+
+        public bool Delete(string userID)
         {
-            repository.Update("UpdateUser", user);
-        }
-        public void Delete(string userId)
-        {
-            repository.Delete("DeleteUser", new User { UserId = userId });
+            int result = sqlMapper.Delete("DeleteUser", userID);
+            return result > 0;
         }
     }
 }
