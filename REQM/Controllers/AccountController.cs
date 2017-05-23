@@ -13,6 +13,7 @@ namespace REQM.Controllers
     public class AccountController : Controller
     {
         private UserService userCRUD = new UserService();
+        private User userLogin = new User();
         public ActionResult Index()
         {
             return View();
@@ -41,22 +42,26 @@ namespace REQM.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult login(User user)
+        public ActionResult login(LoginView user)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid)//验证用户实体类中的条件是满足，密码不少于6位
             {
-                user.PasswordHash = PasswordHelper.GetMd5HashStr(user.PasswordHash);
-                User user1 = userCRUD.CheckUser(user);
+                userLogin.UserName = user.UserName;
+                userLogin.PasswordHash = PasswordHelper.GetMd5HashStr(user.PasswordHash);
+
+                User user1 = userCRUD.CheckUser(userLogin);
                 if (user1 != null)
                 {
                     //保存session
                     HttpContext.Session["UserID"] = user1.UserID;
                     Session["User"] = user1;
                     //string userID = HttpContext.Session["UserID"] as string;
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Home");
                 }
+                ModelState.AddModelError("", "用户名或密码错误，请重新输入！");
             }
-            return View("Login");
+            //将ModelState的验证结果传回视图
+            return View(user);
         }
         /// <summary>
         /// 注册方法（Post表单）
@@ -64,10 +69,26 @@ namespace REQM.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Register(User user)
         {
-            return RedirectToAction("Login", "Account");
-
+            if (ModelState.IsValid)
+            {
+                if (!userCRUD.VerifyUser(user.UserName))//判断用户名是否存在
+                {
+                    user.UserID = Guid.NewGuid().ToString();
+                    user.PasswordHash = PasswordHelper.GetMd5HashStr(user.PasswordHash);
+                    user.CreateAt = DateTime.Now;
+                    userCRUD.Create(user);
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "用户名已存在");
+                }
+            }
+            //将ModelState的验证结果传回视图
+            return View(user);
         }
 
         /// <summary>

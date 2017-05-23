@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model LoginView
 
 @{
     ViewBag.Title = "用户登录";
@@ -7,7 +7,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "请输入合法的用户名或密码", new { @class = "text-danger" })
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
     <div class="form-group">
         @Html.LabelFor(m => m.UserName)

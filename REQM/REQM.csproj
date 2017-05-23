@@ -167,11 +167,16 @@
     <None Include="Content\scripts\_references.js" />
     <Content Include="Global.asax" />
     <EmbeddedResource Include="MapFiles\User.xml" />
+    <EmbeddedResource Include="MapFiles\Product.xml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Domain\Notes.cs" />
+    <Compile Include="Domain\Product.cs" />
+    <Compile Include="Domain\Tools.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -207,6 +212,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

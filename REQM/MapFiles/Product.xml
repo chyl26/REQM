@@ -4,15 +4,15 @@
 
   <!-- 设置别名，用于底下指定类型的时候不需要全全类名(包括长的空间名 ),最后一个参数是项目的命名空间名 -->
   <alias>
-    <typeAlias alias="User" type="REQM.Domain.User, REQM"/>
+    <typeAlias alias="Product" type="REQM.Domain.Product, REQM"/>
   </alias>
 
   <!-- 数据库到实体类的映射表 -->
   <resultMaps>
 
     <!-- 数据库的全部字段到实体类的映射 -->
-    <resultMap id="SelectAllResult" class="User">
-      <result property="UserID" column="UserID" dbType="char" type="string" />
+    <resultMap id="SelectAllResult" class="Product">
+      <result property="ProductId" column="ProductId" dbType="char" type="string" />
       <result property="UserName" column="UserName" dbType="varchar" type="string" />
       <result property="DisplayName" column="DisplayName" dbType="varchar" type="string" />
       <result property="PasswordHash" column="PasswordHash" dbType="varchar" type="string" />
@@ -29,9 +29,9 @@
   <statements>
 
     <!-- 添加句子SQL语句 -->
-    <insert id="InsertUser" parameterClass="User" >
+    <insert id="InsertProduct" parameterClass="Product" >
       <![CDATA[  
-      insert into Users  
+      insert into Products  
       (UserID,UserName,DisplayName,PasswordHash,Email,MobilePhone,CreateAt)  
       values  
       (#UserID#,#UserName#,#DisplayName#,#PasswordHash#,#Email#,#MobilePhone#,#CreateAt#)  
@@ -39,18 +39,18 @@
     </insert>
 
     <!-- parameterClass表示传入的参数为int -->
-    <delete id="DeleteUser" parameterClass="string">
+    <delete id="DeleteProduct" parameterClass="string">
       <![CDATA[
-          delete from Users  
+          delete from Products  
           where  
           UserID = #value#  
           ]]>
     </delete>
 
     <!-- #UserName# 表示传入实体类参数的属性，表示实体的的属性 -->
-    <update id="UpdateUser" parameterClass="User">
+    <update id="UpdateProduct" parameterClass="Product">
       <![CDATA[  
-          UPDATE Users SET  
+          UPDATE Products SET  
           UserName=#UserName#,
           DisplayName=#DisplayName#,
           PasswordHash=#PasswordHash#,
@@ -63,7 +63,7 @@
     </update>
 
     <!-- resultMap="SelectAllResult"表示数据库字段与实体类的映射关系和上面配置的SelectAllResult一样 -->
-    <select id="SelectAllUser" resultMap="SelectAllResult">
+    <select id="SelectAllProduct" resultMap="SelectAllResult">
       <![CDATA[  
           SELECT UserID
           ,UserName
@@ -72,29 +72,7 @@
           ,Email
           ,MobilePhone
           ,CreateAt
-          FROM Users
-          ]]>
-    </select>
-
-    <!-- #value# 是点位符会被传入的parameterClass的string类型代替 -->
-    <select id="SelectUserById" parameterClass="string" resultMap="SelectAllResult" extends="SelectAllUser">
-      <![CDATA[  
-          where UserID = #value#  
-          ]]>
-    </select>
-
-    <!-- #value# 是点位符会被传入的parameterClass的string类型代替 -->
-    <select id="SelectUserByUserName" parameterClass="string" resultMap="SelectAllResult" extends="SelectAllUser">
-      <![CDATA[  
-          where UserName = #value#  
-          ]]>
-    </select>
-
-    <!-- #value# 是点位符会被传入的parameterClass的string类型代替 -->
-    <select id="CheckUser" parameterClass="string" resultMap="SelectAllResult" extends="SelectAllUser">
-      <![CDATA[  
-          where UserName = #UserName# and
-          PasswordHash = #PasswordHash#
+          FROM Products
           ]]>
     </select>
 
