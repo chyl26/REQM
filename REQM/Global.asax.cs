@@ -1,4 +1,5 @@
-﻿using System;
+﻿using REQM.Helper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +14,9 @@ namespace REQM
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            //初始化AutoMapper
+            AutoMapperConfiguration.Init();
         }
     }
 }

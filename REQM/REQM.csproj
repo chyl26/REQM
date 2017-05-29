@@ -43,6 +43,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Castle.DynamicProxy">
       <HintPath>Lib\mybitas\Castle.DynamicProxy.dll</HintPath>
     </Reference>
@@ -105,6 +109,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\mysql\MySql.Web.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -149,6 +161,7 @@
     <Content Include="Content\bootstrap\css\bootstrap.css" />
     <Content Include="Content\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\bootstrap\css\Site.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="Content\scripts\bootstrap.js" />
     <Content Include="Content\scripts\bootstrap.min.js" />
     <None Include="Content\scripts\jquery-1.10.2.intellisense.js" />
@@ -167,26 +180,61 @@
     <None Include="Content\scripts\_references.js" />
     <Content Include="Global.asax" />
     <EmbeddedResource Include="MapFiles\User.xml" />
-    <EmbeddedResource Include="MapFiles\Product.xml" />
+    <EmbeddedResource Include="MapFiles\Product.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapFiles\ProductInfo.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="Image\Logo.jpg" />
+    <EmbeddedResource Include="MapFiles\RepDetailed.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Domain\Notes.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductInfoController.cs" />
+    <Compile Include="Controllers\RepDetailedController.cs" />
+    <Compile Include="Domain\Product\HelpDoc.cs" />
+    <Compile Include="Domain\Note.cs" />
+    <Compile Include="Domain\Product\OperatingDoc.cs" />
     <Compile Include="Domain\Product.cs" />
+    <Compile Include="Domain\Product\ProductInfo.cs" />
+    <Compile Include="Domain\Product\RepData.cs" />
+    <Compile Include="Domain\Product\RepInteractive.cs" />
+    <Compile Include="Domain\Product\RepDetailed.cs" />
+    <Compile Include="Domain\Product\RepOther.cs" />
     <Compile Include="Domain\Tools.cs" />
     <Compile Include="Domain\User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\filter\AuthenticationAttribute.cs" />
+    <Compile Include="Helper\Mapper\AutoMapperConfiguration.cs" />
     <Compile Include="Helper\Constant.cs" />
+    <Compile Include="Helper\Mapper\MappingExtensions.cs" />
     <Compile Include="Helper\ResourceType.cs" />
+    <Compile Include="Helper\SerializeObjectToString.cs" />
+    <Compile Include="Models\HelpDocModel.cs" />
+    <Compile Include="Models\OperatingDocModel.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ProductInfoModel.cs" />
+    <Compile Include="Models\RepDataModel.cs" />
+    <Compile Include="Models\RepDetailedModel.cs" />
+    <Compile Include="Models\RepInteractiveModel.cs" />
+    <Compile Include="Models\RepOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\PasswordHelper.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\MbRepository.cs" />
+    <Compile Include="Service\RepDetailed.cs" />
+    <Compile Include="Service\ProductInfoService.cs" />
+    <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -212,7 +260,18 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Shared\_Layout_Empty.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\ProductInfo\Index.cshtml" />
+    <Content Include="Views\ProductInfo\Create.cshtml" />
+    <Content Include="Views\ProductInfo\Edit.cshtml" />
+    <Content Include="Views\ProductInfo\Details.cshtml" />
+    <Content Include="Views\ProductInfo\Document.cshtml" />
+    <Content Include="Views\RepDetailed\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -222,7 +281,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Views\File\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

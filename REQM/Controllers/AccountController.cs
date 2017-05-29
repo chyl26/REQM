@@ -53,10 +53,10 @@ namespace REQM.Controllers
                 if (user1 != null)
                 {
                     //保存session
-                    HttpContext.Session["UserID"] = user1.UserID;
+                    HttpContext.Session["UserID"] = user1.UserId;
                     Session["User"] = user1;
                     //string userID = HttpContext.Session["UserID"] as string;
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Product");
                 }
                 ModelState.AddModelError("", "用户名或密码错误，请重新输入！");
             }
@@ -76,7 +76,7 @@ namespace REQM.Controllers
             {
                 if (!userCRUD.VerifyUser(user.UserName))//判断用户名是否存在
                 {
-                    user.UserID = Guid.NewGuid().ToString();
+                    user.UserId = Guid.NewGuid().ToString();
                     user.PasswordHash = PasswordHelper.GetMd5HashStr(user.PasswordHash);
                     user.CreateAt = DateTime.Now;
                     userCRUD.Create(user);

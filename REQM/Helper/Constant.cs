@@ -7,6 +7,6 @@ namespace REQM.Helper
 {
     public class Constant
     {
-        public const int PAGESIZE = 10;//默认分页大小
+        public const int pageSize = 10;//默认分页大小
     }
 }

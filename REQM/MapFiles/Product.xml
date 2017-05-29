@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<sqlMap namespace="User" xmlns="http://ibatis.apache.org/mapping"
+<sqlMap namespace="Product" xmlns="http://ibatis.apache.org/mapping"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <!-- 设置别名，用于底下指定类型的时候不需要全全类名(包括长的空间名 ),最后一个参数是项目的命名空间名 -->
@@ -13,12 +13,16 @@
     <!-- 数据库的全部字段到实体类的映射 -->
     <resultMap id="SelectAllResult" class="Product">
       <result property="ProductId" column="ProductId" dbType="char" type="string" />
-      <result property="UserName" column="UserName" dbType="varchar" type="string" />
-      <result property="DisplayName" column="DisplayName" dbType="varchar" type="string" />
-      <result property="PasswordHash" column="PasswordHash" dbType="varchar" type="string" />
-      <result property="Email" column="Email" dbType="varchar" type="string" />
-      <result property="MobilePhone" column="MobilePhone" dbType="varchar" type="string" />
-      <result property="CreateAt" column="CreateAt" dbType="datetime" type="DateTime" />
+      <result property="ProductName" column="ProductName" dbType="varchar" type="string" />
+      <result property="Productlogic" column="Productlogic" dbType="mediumtext" type="string" />
+      <result property="Characteristic" column="Characteristic" dbType="mediumtext" type="string" />
+      <result property="Interactive" column="Interactive" dbType="mediumtext" type="string" />
+      <result property="DateRep" column="DateRep" dbType="mediumtext" type="string" />
+      <result property="OtherRep" column="OtherRep" dbType="mediumtext" type="string" />
+      <result property="CreateAt" column="CreateAt" dbType="DateTime" type="DateTime" />
+      <result property="UpdateAt" column="UpdateAt" dbType="DateTime" type="DateTime" />
+      <result property="user.UserId" column="UserId" dbType="char" type="string" />
+      <result property="user.DisplayName" column="DisplayName" dbType="varchar" type="string" />
     </resultMap>
 
     <!-- 这里可以配置其它只需要指定字段的映射文件(这里是不返回ID) -->
@@ -32,18 +36,18 @@
     <insert id="InsertProduct" parameterClass="Product" >
       <![CDATA[  
       insert into Products  
-      (UserID,UserName,DisplayName,PasswordHash,Email,MobilePhone,CreateAt)  
+      (ProductId,ProductName,Productlogic,Characteristic,Interactive,DateRep,OtherRep,CreateAt,UpdateAt,UserId)  
       values  
-      (#UserID#,#UserName#,#DisplayName#,#PasswordHash#,#Email#,#MobilePhone#,#CreateAt#)  
+      (#ProductId#,#ProductName#,#Productlogic#,#Characteristic#,#Interactive#,#DateRep#,#OtherRep#,#CreateAt#,#UpdateAt#,#user.UserId#)  
       ]]>
     </insert>
 
     <!-- parameterClass表示传入的参数为int -->
-    <delete id="DeleteProduct" parameterClass="string">
+    <delete id="DeleteProduct" parameterClass="Product">
       <![CDATA[
           delete from Products  
           where  
-          UserID = #value#  
+          ProductId = #ProductId#
           ]]>
     </delete>
 
@@ -51,32 +55,75 @@
     <update id="UpdateProduct" parameterClass="Product">
       <![CDATA[  
           UPDATE Products SET  
-          UserName=#UserName#,
-          DisplayName=#DisplayName#,
-          PasswordHash=#PasswordHash#,
-          Email=#Email#,
-          MobilePhone=#MobilePhone#,
-          CreateAt=#CreateAt#
+          ProductName=#ProductName#,
+          Productlogic=#Productlogic#,
+          Characteristic=#Characteristic#,
+          Interactive=#Interactive#,
+          DateRep=#DateRep#,
+          OtherRep=#OtherRep#,
+          UpdateAt=#UpdateAt#,
+          UserId=#user.UserId#          
           WHERE  
-          UserID=#UserID#  
+          ProductId=#ProductId#  
           ]]>
     </update>
 
     <!-- resultMap="SelectAllResult"表示数据库字段与实体类的映射关系和上面配置的SelectAllResult一样 -->
-    <select id="SelectAllProduct" resultMap="SelectAllResult">
+    <select id="SelectProductByCondition"  parameterClass="Product" resultMap="SelectAllResult">
       <![CDATA[  
-          SELECT UserID
-          ,UserName
-          ,DisplayName
-          ,PasswordHash
-          ,Email
-          ,MobilePhone
-          ,CreateAt
-          FROM Products
+          SELECT a.ProductId
+          ,a.ProductName
+          ,a.Productlogic
+          ,a.Characteristic
+          ,a.Interactive
+          ,a.DateRep
+          ,a.OtherRep
+          ,a.CreateAt
+          ,a.UpdateAt
+          ,a.UserId
+          ,u.DisplayName
+          FROM Products a left join Users u on a.UserId = u.UserId 
           ]]>
+      <dynamic prepend="WHERE">
+        <isNotEmpty prepend="AND" property="ProductId">
+          <![CDATA[  
+           a.ProductId = #ProductId#
+            ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="ProductName">
+          <![CDATA[  
+           a.ProductName = #ProductName#
+            ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="Productlogic">
+          <![CDATA[  
+           a.Productlogic = #Productlogic#
+            ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="Characteristic">
+          <![CDATA[  
+           a.Characteristic = #Characteristic#
+            ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="Interactive">
+          <![CDATA[  
+           a.Interactive = #Interactive#
+            ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="DateRep">
+          <![CDATA[  
+           a.DateRep = #DateRep#
+            ]]>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="user.UserId">
+          <![CDATA[  
+           a.UserId = #User.UserId#
+            ]]>
+        </isNotEmpty>
+        
+      </dynamic>
     </select>
-
-
+    
   </statements>
 
 </sqlMap>

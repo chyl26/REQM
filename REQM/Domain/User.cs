@@ -12,7 +12,7 @@ namespace REQM.Domain
     /// </summary>
     public class User
     {
-        public string UserID { get; set; }
+        public string UserId { get; set; }
 
         [Required(ErrorMessage = "账号不能为空")]
         [RegularExpression(@"^[a-zA-Z]{1,1}[a-zA-Z0-9_]{5,14}$", ErrorMessage = "只包含字母、数字和下划线的6-16位字符，而且只能是以字母开头")]

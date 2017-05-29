@@ -21,7 +21,7 @@ namespace REQM.Service
         }
 
         /// <summary>
-        /// 
+        /// 创建一个用户
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
